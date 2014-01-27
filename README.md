@@ -1,12 +1,17 @@
 knife-axe
 =========
 
-installation:
+### Installation:
+
 ```
-$ gem install diffy
+$ gem install knife-axe
+```
+or
+```
 $ cp axe*.rb ~/.chef/plugins/knife
 ```
-usage:
+
+### Usage:
 ```
 $ knife axe role ~/chef-repo/role/role42.rb
 $ knife axe env ~/chef-repo/environments/environment42.rb
