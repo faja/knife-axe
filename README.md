@@ -1,5 +1,8 @@
 knife-axe
 =========
+knife axe prints diff of objects (environment,data_bag,role) before uploading them.
+
+![](https://raw2.github.com/faja/images/master/knife-axe/knife-axe.png)
 
 ### Installation:
 
