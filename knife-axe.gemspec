@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
 	s.name = "knife-axe"
-	s.version = "0.1.1"
-	s.date = "2014-01-27"
+	s.version = "0.1.2"
+	s.date = "2014-01-28"
 	s.summary = ""
 	s.description = ""
 	s.authors = ["Marcin Cabaj", "Sam Clements"]
