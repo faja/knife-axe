@@ -14,6 +14,15 @@ or
 $ cp axe*.rb ~/.chef/plugins/knife
 ```
 
+### Configuration:
+knife.rb
+```
+knife[:hipchat_enabled]=true
+knife[:hipchat_nickname]='NICK_NAME'
+knife[:hipchat_apikey]='API_KEY'
+knife[:hipchat_room]='ROOM_NAME'
+```
+
 ### Usage:
 ```
 $ knife axe role ~/chef-repo/role/role42.rb

@@ -5,9 +5,20 @@ class Chef
         require 'json'
         require 'diffy'
         require 'chef/knife/core/object_loader'
+        require 'hipchat'
       end
 
       banner 'knife axe data bag DATABAG FILENAME'
+
+      def hipchat_notification(databag)
+        begin
+          message = "User '#{ENV['USER']}' just updated databag '#{databag}'"
+          client = HipChat::Client.new(Chef::Config[:knife][:hipchat_apikey])
+          client[Chef::Config[:knife][:hipchat_room]].send( Chef::Config[:knife][:hipchat_nickname], message, :color => 'purple')
+        rescue Exception => msg
+          puts "HipChat notification error: #{msg}"
+        end
+      end
 
       def run
         if @name_args[0].nil?
@@ -48,6 +59,9 @@ class Chef
           dbag.raw_data = item_ff
           dbag.save
           ui.msg("Saved new version of data bag item #{databag}/#{item_name}")
+          if Chef::Config[:knife][:hipchat_enabled]
+            hipchat_notification "#{databag}/#{item_name}"
+          end
         end
       end
     end

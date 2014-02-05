@@ -5,9 +5,20 @@ class Chef
         require 'json'
         require 'diffy'
         require 'chef/knife/core/object_loader'
+        require 'hipchat'
       end
 
       banner 'knife axe role FILE'
+
+      def hipchat_notification(role)
+        begin
+          message = "User '#{ENV['USER']}' just updated role '#{role}'"
+          client = HipChat::Client.new(Chef::Config[:knife][:hipchat_apikey])
+          client[Chef::Config[:knife][:hipchat_room]].send( Chef::Config[:knife][:hipchat_nickname], message, :color => 'purple')
+        rescue Exception => msg
+          puts "HipChat notification error: #{msg}"
+        end
+      end
 
       def run
         if @name_args[0].nil?
@@ -37,6 +48,9 @@ class Chef
             ui.confirm("Continue")
             role_ff.save
             ui.msg("Saved new version of role #{role_fc.name}")
+            if Chef::Config[:knife][:hipchat_enabled]
+              hipchat_notification role_fc.name
+            end
           end
         end
       end

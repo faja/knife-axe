@@ -5,11 +5,29 @@ class Chef
         require 'json'
         require 'diffy'
         require 'chef/knife/core/object_loader'
+        require 'hipchat'
       end
 
       banner 'knife axe env FILENAME'
 
+      def hipchat_color(env)
+        return 'red' if env == 'production'
+        return 'yellow' if env == 'staging' or env == 'newstaging'
+        return 'green'
+      end
+
+      def hipchat_notification(env)
+        begin
+          message = "User '#{ENV['USER']}' just updated environment '#{env}'"
+          client = HipChat::Client.new(Chef::Config[:knife][:hipchat_apikey])
+          client[Chef::Config[:knife][:hipchat_room]].send( Chef::Config[:knife][:hipchat_nickname], message, :color => hipchat_color(env))
+        rescue Exception => msg
+          puts "HipChat notification error: #{msg}"
+        end
+      end
+
       def run
+
         if @name_args[0].nil?
           show_usage
           ui.fatal("You must specify a environment file")
@@ -37,6 +55,9 @@ class Chef
             ui.confirm("Continue")
             env_ff.save
             ui.msg("Saved new version of environment #{env_fc.name}")
+            if Chef::Config[:knife][:hipchat_enabled]
+              hipchat_notification env_name
+            end
           end
         end
       end
