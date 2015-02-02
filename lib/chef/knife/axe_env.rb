@@ -5,6 +5,7 @@ class Chef
         require 'json'
         require 'diffy'
         require 'chef/knife/core/object_loader'
+        require 'chef/environment'
       end
 
       banner 'knife axe env FILENAME'
